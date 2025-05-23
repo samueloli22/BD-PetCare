@@ -1,0 +1,135 @@
+-- Modelo físico do banco de dados PetCare
+
+CREATE TABLE Usuarios (
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_nome VARCHAR(100) NOT NULL,
+    cpf VARCHAR(11) NOT NULL UNIQUE,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    verificado BOOLEAN NOT NULL DEFAULT FALSE,
+    telefone VARCHAR(20),
+    tipo ENUM('Comum', 'Ong', 'Prefeitura') NOT NULL,
+    senha VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE ONG (
+    id_ong INT PRIMARY KEY AUTO_INCREMENT,
+    ong_email VARCHAR(100) NOT NULL,
+    ong_telefone VARCHAR(20),
+    ong_descricao TEXT,
+    ong_nome VARCHAR(100) NOT NULL,
+    cnpj VARCHAR(14) NOT NULL UNIQUE,
+    fk_ONG_id_usuario_1 INT NOT NULL,
+    FOREIGN KEY (fk_ONG_id_usuario_1) REFERENCES Usuarios(id_usuario)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE Endereco (
+    id_endereco INT PRIMARY KEY AUTO_INCREMENT,
+    cidade VARCHAR(100) NOT NULL,
+    cep VARCHAR(20) NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    rua VARCHAR(50) NOT NULL,
+    bairro VARCHAR(100),
+    tipo_endereco ENUM('Residencial', 'Desaparecimento', 'ONG', 'Evento', 'Campanha', 'Outro') NOT NULL,
+    fk_enderecol_id_ong INT,
+    FOREIGN KEY (fk_enderecol_id_ong) REFERENCES ONG(id_ong)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE Animais (
+    id_animal INT PRIMARY KEY AUTO_INCREMENT,
+    animal_nome VARCHAR(100) NOT NULL,
+    porte ENUM('Pequeno', 'Médio', 'Grande') NOT NULL,
+    especie VARCHAR(100),
+    cor VARCHAR(100),
+    raca VARCHAR(100),
+    imagem VARCHAR(255),
+    animal_descricao VARCHAR(100),
+    animal_rg VARCHAR(20) UNIQUE,
+    fk_animais_id_usuario INT NOT NULL,
+    FOREIGN KEY (fk_animais_id_usuario) REFERENCES Usuarios(id_usuario)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE Animais_desaparecidos (
+    id_animal_des INT PRIMARY KEY AUTO_INCREMENT,
+    data_desaparecimneto DATETIME NOT NULL,
+    fk_animaisdp_id_usuario INT NOT NULL,
+    fk_animais_dp_id_animal INT NOT NULL,
+    fk_animais_dp_id_endereco INT NOT NULL,
+    FOREIGN KEY (fk_animaisdp_id_usuario) REFERENCES Usuarios(id_usuario)
+        ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (fk_animais_dp_id_animal) REFERENCES Animais(id_animal)
+        ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (fk_animais_dp_id_endereco) REFERENCES Endereco(id_endereco)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE Campanhas (
+    id_campanhas INT PRIMARY KEY AUTO_INCREMENT,
+    campanha_nome VARCHAR(100) NOT NULL,
+    campanhas_tipo ENUM('vacinacao', 'Castracao', 'Adocao', 'Doacao', 'Outro') NOT NULL,
+    data_inicio DATETIME NOT NULL,
+    data_final DATETIME,
+    campanha_descricao TEXT,
+    fk_campanha_id_endereco INT NOT NULL,
+    fk_campanha_id_usuario INT NOT NULL,
+    FOREIGN KEY (fk_campanha_id_endereco) REFERENCES Endereco(id_endereco)
+        ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (fk_campanha_id_usuario) REFERENCES Usuarios(id_usuario)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE Noticias (
+    id_noticia INT PRIMARY KEY AUTO_INCREMENT,
+    noticia_nome VARCHAR(100) NOT NULL,
+    tipo ENUM('Campanha de Vacinação', 'Castração', 'Evento Comunitário', 'Adoção', 'Denúncia', 'Informativo Geral') NOT NULL,
+    noticia_conteudo TEXT NOT NULL,
+    noticia_imagem VARCHAR(255),
+    fk_noticia_id_usuario_1 INT NOT NULL,
+    FOREIGN KEY (fk_noticia_id_usuario_1) REFERENCES Usuarios(id_usuario)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE Adocoes (
+    id_adocoes INT PRIMARY KEY AUTO_INCREMENT,
+    adocao_data DATETIME NOT NULL,
+    fk_adocoes_id_usuario INT NOT NULL,
+    fk_adocoes_id_animal INT NOT NULL,
+    FOREIGN KEY (fk_adocoes_id_usuario) REFERENCES Usuarios(id_usuario)
+        ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (fk_adocoes_id_animal) REFERENCES Animais(id_animal)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE historico_saude (
+    id_historico_saude INT PRIMARY KEY AUTO_INCREMENT,
+    observacoes TEXT,
+    data_observacao DATE NOT NULL,
+    fk_historico_id_animal INT NOT NULL,
+    FOREIGN KEY (fk_historico_id_animal) REFERENCES Animais(id_animal)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE registra (
+    id_registra INT PRIMARY KEY AUTO_INCREMENT,
+    fk_Usuarios_id_usuario INT NOT NULL,
+    fk_Endereco_id_endereco INT NOT NULL,
+    FOREIGN KEY (fk_Usuarios_id_usuario) REFERENCES Usuarios(id_usuario)
+        ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY (fk_Endereco_id_endereco) REFERENCES Endereco(id_endereco)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE Canais_denuncia (
+    id_canais_denuncia INT PRIMARY KEY AUTO_INCREMENT,
+    canal_email VARCHAR(100),
+    canal_descricao TEXT,
+    canal_tipo VARCHAR(100) NOT NULL,
+    nome_instituicao VARCHAR(100) NOT NULL,
+    canal_telefone VARCHAR(30),
+    canal_site VARCHAR(255),
+    fk_canal_id_endereco INT,
+    FOREIGN KEY (fk_canal_id_endereco) REFERENCES Endereco(id_endereco)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
