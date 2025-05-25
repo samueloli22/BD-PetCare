@@ -144,7 +144,7 @@ COLLATE = utf8mb4_unicode_ci;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `petcare_db`.`animais_desaparecidos` (
   `id_animal_des` INT NOT NULL AUTO_INCREMENT,
-  `data_desaparecimneto` DATETIME NOT NULL,
+  `data_desaparecimento` DATETIME NOT NULL,
   `fk_animaisdp_id_usuario` INT NOT NULL,
   `fk_animais_dp_id_animal` INT NOT NULL,
   `fk_animais_dp_id_endereco` INT NOT NULL,
