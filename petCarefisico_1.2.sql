@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS `petcare_db`.`endereco` (
   `estado` VARCHAR(50) NOT NULL,
   `rua` VARCHAR(50) NOT NULL,
   `bairro` VARCHAR(100) NULL DEFAULT NULL,
-  `tipo_endereco` ENUM('Residencial', 'Desaparecimento', 'ONG', 'Evento', 'Campanha', 'Outro') NOT NULL,
+  `tipo_endereco` ENUM('Residencial', 'Desaparecimento', 'ONG', 'Evento', 'Campanha', 'LocalDenuncia', 'Outro') NOT NULL,
   `fk_enderecol_id_ong` INT NULL DEFAULT NULL,
   PRIMARY KEY (`id_endereco`),
   INDEX `fk_enderecol_id_ong` (`fk_enderecol_id_ong` ASC) VISIBLE,
