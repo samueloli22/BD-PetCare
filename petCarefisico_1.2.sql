@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `petcare_db`.`usuarios` (
   `email` VARCHAR(100) NOT NULL,
   `verificado` TINYINT(1) NOT NULL DEFAULT '0',
   `telefone` VARCHAR(20) NULL DEFAULT NULL,
-  `tipo` ENUM('Comum', 'Ong', 'Prefeitura') NOT NULL,
+  `tipo` ENUM('Comum', 'Ong') NOT NULL,
   `senha` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id_usuario`),
   UNIQUE INDEX `cpf` (`cpf` ASC) VISIBLE,
