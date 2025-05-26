@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `petcare_db`.`animais` (
   `imagem` VARCHAR(255) NOT NULL,
   `animal_descricao` VARCHAR(100) NOT NULL,
   `animal_rg` VARCHAR(20) NULL DEFAULT NULL,
-  `status' ENUM('Disponível', 'Adotado', 'Desaparecido') NOT NULL DEFAULT 'Disponível',
+  `status` ENUM('Disponível', 'Adotado', 'Desaparecido') NOT NULL DEFAULT 'Disponível',
   `fk_animais_id_usuario` INT NOT NULL,
   PRIMARY KEY (`id_animal`),
   UNIQUE INDEX `animal_rg` (`animal_rg` ASC) VISIBLE,
