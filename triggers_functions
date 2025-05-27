@@ -1,0 +1,29 @@
+-- trigger de criptografar na inserção.
+use petcare_db;
+DELIMITER $$
+
+CREATE TRIGGER before_insert_usuario
+BEFORE INSERT ON Usuarios
+FOR EACH ROW
+BEGIN
+    SET NEW.senha = SHA2(NEW.senha, 256);
+END$$
+
+DELIMITER ;
+-- trigger de criptografar se fizer um update.
+DELIMITER $$
+
+CREATE TRIGGER before_update_usuario
+BEFORE UPDATE ON Usuarios
+FOR EACH ROW
+BEGIN
+    IF NEW.senha != OLD.senha THEN
+        SET NEW.senha = SHA2(NEW.senha, 256);
+    END IF;
+END$$
+
+DELIMITER ;
+-- criptografar o que já estva inserido no banco.
+UPDATE Usuarios
+SET senha = SHA2(senha, 256)
+WHERE LENGTH(senha) < 64; 
