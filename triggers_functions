@@ -23,7 +23,7 @@ BEGIN
 END$$
 
 DELIMITER ;
--- criptografar o que já estva inserido no banco.
+-- mudar os usuarios que já estão inseridos.
 UPDATE Usuarios
 SET senha = SHA2(senha, 256)
 WHERE LENGTH(senha) < 64; 
