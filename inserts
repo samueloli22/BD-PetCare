@@ -2022,3 +2022,4 @@ INSERT INTO Endereco (cidade, cep, estado, rua, bairro, tipo_endereco) VALUES ('
 INSERT INTO Endereco (cidade, cep, estado, rua, bairro, tipo_endereco) VALUES ('Castelândia', '75925-001', 'Goiás', 'Avenida Principal, 10', 'Centro', 'Residencial');
 INSERT INTO Endereco (cidade, cep, estado, rua, bairro, tipo_endereco) VALUES ('Castelândia', '75925-002', 'Goiás', 'Rua do Comércio, 20', 'Setor Central', 'Residencial');
 INSERT INTO Endereco (cidade, cep, estado, rua, bairro, tipo_endereco) VALUES ('Castelândia', '75925-003', 'Goiás', 'Avenida Brasil, 30', 'Vila Nova', 'Residencial');
+INSERT INTO Endereco (cidade, cep, estado, rua, bairro, tipo_endereco) VALUES ('Castelândia', '75925-004', 'Goiás', 'Rua João Horácio, 40', 'Centro', 'Residencial');
