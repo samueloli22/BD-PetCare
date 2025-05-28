@@ -101,19 +101,11 @@ CREATE TABLE IF NOT EXISTS `petcare_db`.`ong` (
   `ong_descricao` TEXT NULL DEFAULT NULL,
   `ong_nome` VARCHAR(100) NOT NULL,
   `cnpj` VARCHAR(14) NOT NULL,
-  `fk_ONG_id_usuario_1` INT NOT NULL,
   PRIMARY KEY (`id_ong`),
-  UNIQUE INDEX `cnpj` (`cnpj` ASC) VISIBLE,
-  INDEX `fk_ONG_id_usuario_1` (`fk_ONG_id_usuario_1` ASC) VISIBLE,
-  CONSTRAINT `ong_ibfk_1`
-    FOREIGN KEY (`fk_ONG_id_usuario_1`)
-    REFERENCES `petcare_db`.`usuarios` (`id_usuario`)
-    ON DELETE RESTRICT
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
+  UNIQUE INDEX `cnpj` (`cnpj` ASC)
+) ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
-
 
 -- -----------------------------------------------------
 -- Table `petcare_db`.`endereco`
@@ -293,6 +285,32 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 
+-- -----------------------------------------------------
+-- Table `petcare_db`.`pertence_ong`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `petcare_db`.`pertence_ong` (
+    `id_pertence_ong` INT NOT NULL AUTO_INCREMENT,
+    `fk_pertence_id_usuario` INT NOT NULL,
+    `fk_pertence_id_ong` INT NOT NULL,
+    PRIMARY KEY (`id_pertence_ong`),
+    UNIQUE INDEX `idx_usuario_ong_unique` (`fk_pertence_id_usuario` ASC, `fk_pertence_id_ong` ASC) VISIBLE,
+    INDEX `fk_pertence_id_ong_idx` (`fk_pertence_id_ong` ASC) VISIBLE,
+    CONSTRAINT `fk_pertence_id_usuario`
+        FOREIGN KEY (`fk_pertence_id_usuario`)
+        REFERENCES `petcare_db`.`usuarios` (`id_usuario`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    CONSTRAINT `fk_pertence_id_ong`
+        FOREIGN KEY (`fk_pertence_id_ong`)
+        REFERENCES `petcare_db`.`ong` (`id_ong`)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
