@@ -23,7 +23,7 @@ USE `petcare_db` ;
 CREATE TABLE IF NOT EXISTS `petcare_db`.`usuarios` (
   `id_usuario` INT NOT NULL AUTO_INCREMENT,
   `usuario_nome` VARCHAR(100) NOT NULL,
-  `cpf` VARCHAR(11) NOT NULL,
+  `cpf` VARCHAR(14) NOT NULL,
   `email` VARCHAR(100) NOT NULL,
   `verificado` TINYINT(1) NOT NULL DEFAULT '0',
   `telefone` VARCHAR(20) NULL DEFAULT NULL,
