@@ -100,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `petcare_db`.`ong` (
   `ong_telefone` VARCHAR(20) NOT NULL,
   `ong_descricao` TEXT NULL DEFAULT NULL,
   `ong_nome` VARCHAR(100) NOT NULL,
-  `cnpj` VARCHAR(14) NOT NULL,
+  `cnpj` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`id_ong`),
   UNIQUE INDEX `cnpj` (`cnpj` ASC)
 ) ENGINE = InnoDB
