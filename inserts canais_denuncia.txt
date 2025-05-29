@@ -237,3 +237,12 @@ INSERT INTO canais_denuncia (canal_email, canal_descricao, canal_tipo, nome_inst
 ('canais.denuncia.seguros@ong.org', 'Canais de denúncia seguros e confiáveis.', 'ONG', 'Canais de Denúncia Seguros GO', '6230987654', 'www.canaisdenunciasegurosgo.org', NULL),
 ('fiscalizacao.rural.animal.go@agrodefesa.go.gov.br', 'Fiscalização de animais rurais em Goiás.', 'Órgão Rural', 'Agrodefesa GO - Fiscalização Animal Rural', '6232013500', 'www.agrodefesa.go.gov.br', NULL),
 ('protecao.vida.silvestre.goias@semad.go.gov.br', 'Proteção da vida silvestre em Goiás.', 'Secretaria de Meio Ambiente', 'SEMAD GO - Vida Silvestre Goiás', '6232014000', 'www.semad.go.gov.br', NULL);
+('faunacerrado@conservacao.org', 'Denúncias de crimes contra a fauna do cerrado.', 'ONG de Conservação', 'Instituto Guardião do Cerrado', '6230112233', 'www.guardiaocerrado.org', NULL),
+('vigilancia.ambiental@go.gov.br', 'Fiscalização e denúncias ambientais em geral.', 'Órgão Governamental', 'Secretaria de Meio Ambiente GO', '6232014000', 'www.semad.go.gov.br', NULL),
+('resgate.animais.go@resgate.org', 'Resgate de animais em situação de emergência.', 'ONG de Resgate', 'Resgate Animal Goiás', '62991112222', 'www.resgateanimalgo.org', NULL),
+('denuncia.comunit@ong.net', 'Apoio a denúncias em comunidades carentes.', 'ONG Social', 'Comunidade Animal Segura', '6235554433', 'www.comunidadeanimal.org', NULL),
+('fiscalizacao.agropecuaria@agro.go.gov.br', 'Denúncias de maus-tratos em propriedades rurais.', 'Órgão Rural', 'Agrodefesa GO - Fiscalização', '6232013500', 'www.agrodefesa.go.gov.br', NULL),
+('protecao.legal.animal@adv.br', 'Assessoria jurídica para casos de maus-tratos animais.', 'Escritório de Advocacia', 'Justiça Animal GO', '6239001010', 'www.justicaanimalgo.adv.br', NULL),
+('cuidado.responsavel@pet.org', 'Denúncias sobre abandono e negligência de pets.', 'ONG de Proteção', 'Cuidado Pet Responsável', '6230304040', 'www.cuidapet.org', NULL),
+('sos.bicho.rodovia@policia.go.br', 'Denúncias de animais abandonados ou feridos em rodovias estaduais.', 'Órgão de Trânsito', 'Batalhão Rodoviário da PMGO', '198', 'www.pm.go.gov.br', NULL),
+('denuncia.rural.go@mpgo.mp.br', 'Denúncias de crimes ambientais e maus-tratos no campo.', 'Ministério Público', 'MPGO - Meio Ambiente Rural', '6232438000', 'www.mpgo.mp.br', NULL);
