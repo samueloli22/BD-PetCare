@@ -24,7 +24,7 @@ INSERT INTO `petcare_db`.`endereco` (`id_endereco`, `cidade`, `cep`, `estado`, `
 (1023, 'Natal', '59080-000', 'RN', 'Rua do Sol Poente', 'Planalto', 'Desaparecimento', NULL),
 (1024, 'Porto Alegre', '90610-000', 'RS', 'Avenida das Palmeiras', 'Petrópolis', 'Desaparecimento', NULL);
 -- inserts animais desaparecidos 
-INSERT INTO `petcare_db`.`animais_desaparecidos` (`data_desaparecimneto`, `fk_animaisdp_id_usuario`, `fk_animais_dp_id_animal`, `fk_animais_dp_id_endereco`) VALUES
+INSERT INTO `petcare_db`.`animais_desaparecidos` (`data_desaparecimento`, `fk_animaisdp_id_usuario`, `fk_animais_dp_id_animal`, `fk_animais_dp_id_endereco`) VALUES
 ('2025-05-28 19:15:30', 210, 8, 1001),
 ('2025-05-28 19:15:30', 500, 25, 1002),
 ('2025-05-28 19:15:30', 888, 33, 1003),
