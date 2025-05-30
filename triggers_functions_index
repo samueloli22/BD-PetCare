@@ -89,7 +89,7 @@ END //
 
 DELIMITER ;
 
--- criando a function extra.
+-- criando a estrutura de controle.
 DELIMITER //
 
 CREATE FUNCTION verificaTipoUsuario(tipo VARCHAR(20))
