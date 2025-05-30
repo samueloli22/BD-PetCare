@@ -110,3 +110,32 @@ BEGIN
 END //
 
 DELIMITER ;
+
+-- criando a function para dar um resumo basico de usuario
+
+DELIMITER //
+
+CREATE FUNCTION ResumoUsuario(id INT)
+RETURNS VARCHAR(255)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE resultado VARCHAR(255);
+    DECLARE nome VARCHAR(100);
+    DECLARE tipo_usuario VARCHAR(20);
+    DECLARE verificado_usuario BOOLEAN;
+
+    SELECT usuario_nome, tipo, verificado
+    INTO nome, tipo_usuario, verificado_usuario
+    FROM Usuarios
+    WHERE id_usuario = id;
+
+    SET resultado = CONCAT(
+        'Usuário: ', nome, ' | Tipo: ', tipo_usuario, 
+        ' | Verificado: ', IF(verificado_usuario, 'Sim', 'Não')
+    );
+
+    RETURN resultado;
+END //
+
+DELIMITER ;
