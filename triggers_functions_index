@@ -27,3 +27,6 @@ DELIMITER ;
 UPDATE Usuarios
 SET senha = SHA2(senha, 256)
 WHERE LENGTH(senha) < 64; 
+
+-- Adicionando um index usuario_nome (os outros index criam automaticamente por ser notnull)
+CREATE INDEX idx_usuario_nome ON Usuarios(usuario_nome);
