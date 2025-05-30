@@ -88,3 +88,25 @@ BEGIN
 END //
 
 DELIMITER ;
+
+-- criando a function extra.
+DELIMITER //
+
+CREATE FUNCTION verificaTipoUsuario(tipo VARCHAR(20))
+RETURNS VARCHAR(100)
+DETERMINISTIC
+BEGIN
+    DECLARE mensagem VARCHAR(100);
+
+    IF tipo = 'Comum' THEN
+        SET mensagem = 'Usuário comum: acesso limitado.';
+    ELSEIF tipo = 'Ong' THEN
+        SET mensagem = 'ONG cadastrada: pode registrar animais e campanhas.';
+    ELSE
+        SET mensagem = 'Tipo de usuário desconhecido.';
+    END IF;
+
+    RETURN mensagem;
+END //
+
+DELIMITER ;
