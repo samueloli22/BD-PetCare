@@ -139,3 +139,40 @@ BEGIN
 END //
 
 DELIMITER ;
+
+-- criando a function para ver o status da adoção
+
+DELIMITER //
+
+CREATE FUNCTION StatusAdocoes(id_usuario INT)
+RETURNS VARCHAR(255)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE total INT DEFAULT 0;
+    DECLARE ultimo_nome VARCHAR(100) DEFAULT 'Nenhum';
+    DECLARE resultado VARCHAR(255);
+
+    -- Conta quantas adoções o usuário fez
+    SELECT COUNT(*) INTO total
+    FROM Adocoes
+    WHERE fk_adocoes_id_usuario = id_usuario;
+
+    -- Pega o nome do último animal adotado
+    SELECT a.animal_nome INTO ultimo_nome
+    FROM Adocoes ad
+    JOIN Animais a ON a.id_animal = ad.fk_adocoes_id_animal
+    WHERE ad.fk_adocoes_id_usuario = id_usuario
+    ORDER BY ad.adocao_data DESC
+    LIMIT 1;
+
+    -- Monta mensagem final
+    SET resultado = CONCAT(
+        'Total de adoções: ', total, 
+        ' | Último animal adotado: ', ultimo_nome
+    );
+
+    RETURN resultado;
+END //
+
+DELIMITER ;
