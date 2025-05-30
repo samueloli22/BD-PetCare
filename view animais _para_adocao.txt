@@ -1,0 +1,42 @@
+CREATE VIEW animais_para_adocao_detalhes AS
+SELECT
+    a.id_animal,
+    a.animal_nome,
+    a.porte,
+    a.especie,
+    a.cor,
+    a.raca,
+    a.imagem,
+    a.animal_descricao,
+    a.status, -- Confirmando que é 'Disponível'
+    u.usuario_nome AS nome_do_registrador_ou_dono_anterior, -- O usuário que registrou o animal
+    u.email AS email_do_registrador,
+    u.telefone AS telefone_do_registrador,
+    GROUP_CONCAT(
+        CONCAT(
+            'Data: ', DATE_FORMAT(hs.data_observacao, '%d/%m/%Y'),
+            ' - Obs: ', hs.observacoes
+        ) ORDER BY hs.data_observacao DESC SEPARATOR ' | '
+    ) AS historico_saude_completo,
+    e.cidade AS endereco_cidade,
+    e.estado AS endereco_estado,
+    e.rua AS endereco_rua,
+    e.bairro AS endereco_bairro,
+    e.cep AS endereco_cep,
+    e.tipo_endereco AS endereco_tipo
+FROM
+    petcare_db.animais a
+JOIN
+    petcare_db.usuarios u ON a.fk_animais_id_usuario = u.id_usuario -- O usuário que registrou o animal
+LEFT JOIN
+    petcare_db.registra r ON u.id_usuario = r.fk_Usuarios_id_usuario -- Para pegar o endereço do usuário
+LEFT JOIN
+    petcare_db.endereco e ON r.fk_Endereco_id_endereco = e.id_endereco -- Detalhes do endereço do usuário
+LEFT JOIN
+    petcare_db.historico_saude hs ON a.id_animal = hs.fk_historico_id_animal
+WHERE
+    a.status = 'Disponível'
+GROUP BY
+    a.id_animal, a.animal_nome, a.porte, a.especie, a.cor, a.raca, a.imagem, a.animal_descricao, a.status,
+    u.usuario_nome, u.email, u.telefone,
+    e.cidade, e.estado, e.rua, e.bairro, e.cep, e.tipo_endereco;
