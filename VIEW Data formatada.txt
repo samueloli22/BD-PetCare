@@ -1,0 +1,12 @@
+CREATE VIEW vw_animais_desaparecidos_formatado AS
+SELECT
+   animais.animal_nome,  
+   animais.raca,
+   DATE_FORMAT(animais_desaparecidos.data_desaparecimento, '%d/%m/%y') AS data_desaparecimento_formatada,
+   endereco.cidade,
+   endereco.estado
+FROM animais_desaparecidos
+JOIN animais ON animais_desaparecidos.fk_animais_dp_id_animal = animais.id_animal
+JOIN endereco ON animais_desaparecidos.fk_animais_dp_id_endereco = endereco.id_endereco;
+ 
+  SELECT * FROM vw_animais_desaparecidos_formatado;

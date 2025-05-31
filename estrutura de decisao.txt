@@ -1,0 +1,59 @@
+DELIMITER $$
+
+CREATE PROCEDURE `petcare_db`.`verificar_status_campanha`(
+    IN p_id_campanha INT
+)
+BEGIN
+    DECLARE v_data_inicio DATETIME;
+    DECLARE v_data_final DATETIME;
+    DECLARE v_status_campanha VARCHAR(50);
+    DECLARE v_data_atual DATETIME;
+
+    -- Define a data atual
+    SET v_data_atual = NOW(); -- Usa a data e hora do servidor MySQL
+
+    -- Pega as datas da campanha
+    SELECT
+        data_inicio,
+        data_final
+    INTO
+        v_data_inicio,
+        v_data_final
+    FROM
+        `petcare_db`.`Campanhas`
+    WHERE
+        id_campanhas = p_id_campanha;
+
+    -- Estrutura de Decisão para determinar o status da campanha
+    IF v_data_inicio IS NULL THEN -- Campanha não encontrada
+        SET v_status_campanha = 'Campanha Não Encontrada';
+    ELSEIF v_data_final IS NULL THEN -- Campanha sem data final definida (pode ser contínua ou erro de dados)
+        SET v_status_campanha = 'Ativa (Sem Data Final Definida)';
+    ELSEIF v_data_inicio > v_data_final THEN -- Datas inconsistentes
+        SET v_status_campanha = 'Inválida (Data Final Anterior à Data Início)';
+    ELSEIF v_data_atual < v_data_inicio THEN
+        SET v_status_campanha = 'Futura';
+    ELSEIF v_data_atual BETWEEN v_data_inicio AND v_data_final THEN
+        SET v_status_campanha = 'Ativa';
+    ELSEIF v_data_atual > v_data_final THEN
+        SET v_status_campanha = 'Concluída';
+    ELSE
+        SET v_status_campanha = 'Status Indeterminado'; -- Caso de erro ou lógica não coberta
+    END IF;
+
+    -- Retorna o resultado
+    SELECT
+        c.id_campanhas,
+        c.campanha_nome,
+        c.campanhas_tipo,
+        c.data_inicio,
+        c.data_final,
+        v_status_campanha AS status_atual_da_campanha
+    FROM
+        `petcare_db`.`Campanhas` c
+    WHERE
+        c.id_campanhas = p_id_campanha;
+
+END$$
+
+DELIMITER ;
