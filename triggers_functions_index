@@ -99,7 +99,7 @@ BEGIN
     DECLARE mensagem VARCHAR(100);
 
     IF tipo = 'Comum' THEN
-        SET mensagem = 'Usuário comum: acesso limitado.';
+        SET mensagem = 'Usuário comum: pode registrar animais e campanhas.';
     ELSEIF tipo = 'Ong' THEN
         SET mensagem = 'ONG cadastrada: pode registrar animais e campanhas.';
     ELSE
