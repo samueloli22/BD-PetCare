@@ -30,3 +30,149 @@ WHERE LENGTH(senha) < 64;
 
 -- Adicionando um index usuario_nome (os outros index criam automaticamente por ser notnull)
 CREATE INDEX idx_usuario_nome ON Usuarios(usuario_nome);
+
+
+-- Adicionando a function de verificar cpf (inspirado no exemplo dado)
+use petcare_db;
+DELIMITER //
+
+CREATE FUNCTION validaCpf(cpf VARCHAR(14))
+RETURNS VARCHAR(50)
+DETERMINISTIC
+BEGIN
+    DECLARE resultado VARCHAR(50);
+    DECLARE d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11 INT;
+    DECLARE soma INT;
+    DECLARE cpfLimpo VARCHAR(11);
+
+    
+    SET cpfLimpo = REPLACE(REPLACE(REPLACE(cpf, '.', ''), '-', ''), ' ', '');
+
+    -- Verificações se está dentro do tamanho certo
+    IF LENGTH(cpfLimpo) != 11 OR
+       cpfLimpo IN ('00000000000', '11111111111', '22222222222', '33333333333',
+                    '44444444444', '55555555555', '66666666666', '77777777777',
+                    '88888888888', '99999999999', '01234567890') THEN
+        RETURN 'CPF inválido';
+    END IF;
+
+    -- Extrair dígitos
+    SET d1 = SUBSTRING(cpfLimpo, 1, 1);
+    SET d2 = SUBSTRING(cpfLimpo, 2, 1);
+    SET d3 = SUBSTRING(cpfLimpo, 3, 1);
+    SET d4 = SUBSTRING(cpfLimpo, 4, 1);
+    SET d5 = SUBSTRING(cpfLimpo, 5, 1);
+    SET d6 = SUBSTRING(cpfLimpo, 6, 1);
+    SET d7 = SUBSTRING(cpfLimpo, 7, 1);
+    SET d8 = SUBSTRING(cpfLimpo, 8, 1);
+    SET d9 = SUBSTRING(cpfLimpo, 9, 1);
+
+    -- Calculando os digitos
+    SET soma = (d1*10 + d2*9 + d3*8 + d4*7 + d5*6 + d6*5 + d7*4 + d8*3 + d9*2) MOD 11;
+    SET d10 = 11 - soma;
+    IF d10 >= 10 THEN SET d10 = 0; END IF;
+
+    
+    SET soma = (d1*11 + d2*10 + d3*9 + d4*8 + d5*7 + d6*6 + d7*5 + d8*4 + d9*3 + d10*2) MOD 11;
+    SET d11 = 11 - soma;
+    IF d11 >= 10 THEN SET d11 = 0; END IF;
+
+    -- Verificando os digitos
+    IF SUBSTRING(cpfLimpo, 10, 1) = d10 AND SUBSTRING(cpfLimpo, 11, 1) = d11 THEN
+        SET resultado = 'CPF válido';
+    ELSE
+        SET resultado = 'CPF inválido';
+    END IF;
+
+    RETURN resultado;
+END //
+
+DELIMITER ;
+
+-- criando a estrutura de controle.
+DELIMITER //
+
+CREATE FUNCTION verificaTipoUsuario(tipo VARCHAR(20))
+RETURNS VARCHAR(100)
+DETERMINISTIC
+BEGIN
+    DECLARE mensagem VARCHAR(100);
+
+    IF tipo = 'Comum' THEN
+        SET mensagem = 'Usuário comum: pode registrar animais e campanhas.';
+    ELSEIF tipo = 'Ong' THEN
+        SET mensagem = 'ONG cadastrada: pode registrar animais e campanhas.';
+    ELSE
+        SET mensagem = 'Tipo de usuário desconhecido.';
+    END IF;
+
+    RETURN mensagem;
+END //
+
+DELIMITER ;
+
+-- criando a function para dar um resumo basico de usuario
+
+DELIMITER //
+
+CREATE FUNCTION ResumoUsuario(id INT)
+RETURNS VARCHAR(255)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE resultado VARCHAR(255);
+    DECLARE nome VARCHAR(100);
+    DECLARE tipo_usuario VARCHAR(20);
+    DECLARE verificado_usuario BOOLEAN;
+
+    SELECT usuario_nome, tipo, verificado
+    INTO nome, tipo_usuario, verificado_usuario
+    FROM Usuarios
+    WHERE id_usuario = id;
+
+    SET resultado = CONCAT(
+        'Usuário: ', nome, ' | Tipo: ', tipo_usuario, 
+        ' | Verificado: ', IF(verificado_usuario, 'Sim', 'Não')
+    );
+
+    RETURN resultado;
+END //
+
+DELIMITER ;
+
+-- criando a function para ver o status da adoção
+
+DELIMITER //
+
+CREATE FUNCTION StatusAdocoes(id_usuario INT)
+RETURNS VARCHAR(255)
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE total INT DEFAULT 0;
+    DECLARE ultimo_nome VARCHAR(100) DEFAULT 'Nenhum';
+    DECLARE resultado VARCHAR(255);
+
+    -- Conta quantas adoções o usuário fez
+    SELECT COUNT(*) INTO total
+    FROM Adocoes
+    WHERE fk_adocoes_id_usuario = id_usuario;
+
+    -- Pega o nome do último animal adotado
+    SELECT a.animal_nome INTO ultimo_nome
+    FROM Adocoes ad
+    JOIN Animais a ON a.id_animal = ad.fk_adocoes_id_animal
+    WHERE ad.fk_adocoes_id_usuario = id_usuario
+    ORDER BY ad.adocao_data DESC
+    LIMIT 1;
+
+    -- Monta mensagem final
+    SET resultado = CONCAT(
+        'Total de adoções: ', total, 
+        ' | Último animal adotado: ', ultimo_nome
+    );
+
+    RETURN resultado;
+END //
+
+DELIMITER ;
