@@ -1,0 +1,66 @@
+CREATE TABLE IF NOT EXISTS `petcare_db`.`auditoria` (
+    `id_auditoria` INT NOT NULL AUTO_INCREMENT,
+    `acao` VARCHAR(50) NOT NULL, -- Tipo de ação (ex: 'UPDATE', 'INSERT', 'DELETE')
+    `campoAlterado` VARCHAR(100) NOT NULL, -- Nome do campo que foi alterado
+    `valorAntes` TEXT NULL, -- Valor do campo ANTES da alteração
+    `valorDepois` TEXT NULL, -- Valor do campo DEPOIS da alteração
+    `dataAlteracao` DATETIME NOT NULL, -- Data e hora da alteração
+    `usuario` VARCHAR(255) NULL, -- Usuário que realizou a alteração
+    `id_registro_afetado` INT NULL, -- O ID do registro na tabela original (ex: id_usuario)
+    `tabela_afetada` VARCHAR(100) NOT NULL, -- Nome da tabela que foi alterada (ex: 'usuarios')
+    PRIMARY KEY (`id_auditoria`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+DELIMITER $$
+
+CREATE TRIGGER `trg_usuarios_after_update_all_fields`
+AFTER UPDATE ON `petcare_db`.`usuarios`
+FOR EACH ROW
+BEGIN
+    -- Auditoria para 'usuario_nome'
+    IF OLD.usuario_nome <> NEW.usuario_nome THEN
+        INSERT INTO `petcare_db`.`auditoria` (acao, campoAlterado, valorAntes, valorDepois, dataAlteracao, usuario, id_registro_afetado, tabela_afetada)
+        VALUES ('UPDATE', 'usuario_nome', OLD.usuario_nome, NEW.usuario_nome, NOW(), CURRENT_USER(), OLD.id_usuario, 'usuarios');
+    END IF;
+
+    -- Auditoria para 'cpf'
+    IF OLD.cpf <> NEW.cpf THEN
+        INSERT INTO `petcare_db`.`auditoria` (acao, campoAlterado, valorAntes, valorDepois, dataAlteracao, usuario, id_registro_afetado, tabela_afetada)
+        VALUES ('UPDATE', 'cpf', OLD.cpf, NEW.cpf, NOW(), CURRENT_USER(), OLD.id_usuario, 'usuarios');
+    END IF;
+
+    -- Auditoria para 'email'
+    IF OLD.email <> NEW.email THEN
+        INSERT INTO `petcare_db`.`auditoria` (acao, campoAlterado, valorAntes, valorDepois, dataAlteracao, usuario, id_registro_afetado, tabela_afetada)
+        VALUES ('UPDATE', 'email', OLD.email, NEW.email, NOW(), CURRENT_USER(), OLD.id_usuario, 'usuarios');
+    END IF;
+
+    -- Auditoria para 'verificado'
+    IF OLD.verificado <> NEW.verificado THEN
+        INSERT INTO `petcare_db`.`auditoria` (acao, campoAlterado, valorAntes, valorDepois, dataAlteracao, usuario, id_registro_afetado, tabela_afetada)
+        VALUES ('UPDATE', 'verificado', OLD.verificado, NEW.verificado, NOW(), CURRENT_USER(), OLD.id_usuario, 'usuarios');
+    END IF;
+
+    -- Auditoria para 'telefone'
+    IF OLD.telefone <> NEW.telefone THEN
+        INSERT INTO `petcare_db`.`auditoria` (acao, campoAlterado, valorAntes, valorDepois, dataAlteracao, usuario, id_registro_afetado, tabela_afetada)
+        VALUES ('UPDATE', 'telefone', OLD.telefone, NEW.telefone, NOW(), CURRENT_USER(), OLD.id_usuario, 'usuarios');
+    END IF;
+
+    -- Auditoria para 'tipo'
+    IF OLD.tipo <> NEW.tipo THEN
+        INSERT INTO `petcare_db`.`auditoria` (acao, campoAlterado, valorAntes, valorDepois, dataAlteracao, usuario, id_registro_afetado, tabela_afetada)
+        VALUES ('UPDATE', 'tipo', OLD.tipo, NEW.tipo, NOW(), CURRENT_USER(), OLD.id_usuario, 'usuarios');
+    END IF;
+
+    -- Auditoria para 'senha'
+    -- Registre apenas uma indicação de que a senha foi alterada.
+    IF OLD.senha <> NEW.senha THEN
+        INSERT INTO `petcare_db`.`auditoria` (acao, campoAlterado, valorAntes, valorDepois, dataAlteracao, usuario, id_registro_afetado, tabela_afetada)
+        VALUES ('UPDATE', 'senha', 'SENHA_ALTERADA', 'SENHA_ALTERADA', NOW(), CURRENT_USER(), OLD.id_usuario, 'usuarios');
+    END IF;
+
+END$$
