@@ -1,0 +1,27 @@
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS listar_animais_para_adocao_por_porte;$$
+CREATE PROCEDURE listar_animais_para_adocao_por_porte(
+    IN p_porte VARCHAR(20)
+)
+BEGIN
+    SELECT
+        Animais.id_animal,
+        Animais.animal_nome,
+        Animais.porte,
+        Animais.especie,
+        Animais.cor,
+        Animais.raca,
+        Animais.animal_descricao,
+        Usuarios.usuario_nome AS nome_dono,
+        Usuarios.email AS email_dono
+    FROM
+        Animais
+    INNER JOIN Usuarios ON Animais.fk_animais_id_usuario = Usuarios.id_usuario
+    WHERE
+        Animais.porte = p_porte COLLATE utf8mb4_unicode_ci -- Filtrar por porte usando collation para compatibilidade
+        AND Animais.status = 'Disponível' -- Garantir que o animal esteja disponível para adoção
+    ORDER BY Animais.animal_nome;
+END$$
+
+DELIMITER ;
