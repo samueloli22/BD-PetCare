@@ -1,0 +1,13 @@
+DELIMITER //
+CREATE TRIGGER after_insert_adocao
+AFTER INSERT ON adocoes
+FOR EACH ROW
+BEGIN
+  -- Atualiza o status e o novo dono do animal
+  UPDATE animais
+  SET status = 'Adotado',
+      fk_animais_id_usuario = NEW.fk_adocoes_id_usuario
+  WHERE id_animal = NEW.fk_adocoes_id_animal;
+END;
+//
+DELIMITER ;
